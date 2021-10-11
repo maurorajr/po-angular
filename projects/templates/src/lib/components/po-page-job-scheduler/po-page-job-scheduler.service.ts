@@ -26,9 +26,7 @@ export class PoPageJobSchedulerService {
 
   // Cria um recurso
   createResource(resource): Observable<any> {
-    const jobScheduler = this.convertToJobScheduler(resource);
-
-    return this.http.post(`${this.endpoint}`, jobScheduler, { headers: this.headers });
+    return this.http.post(`${this.endpoint}`, resource, { headers: this.headers });
   }
 
   getHeadProcesses() {
@@ -63,12 +61,10 @@ export class PoPageJobSchedulerService {
 
   // Atualiza um recurso
   updateResource(id, resource): Observable<any> {
-    const jobScheduler = this.convertToJobScheduler(resource);
-
-    return this.http.put(`${this.endpoint}/${id}`, jobScheduler, { headers: this.headers });
+    return this.http.put(`${this.endpoint}/${id}`, resource, { headers: this.headers });
   }
 
-  private convertToJobScheduler(jobSchedulerInternal): PoJobScheduler {
+  convertToJobScheduler(jobSchedulerInternal): PoJobScheduler {
     const jobScheduler = { ...jobSchedulerInternal };
 
     if (jobSchedulerInternal.periodicity) {
@@ -95,7 +91,7 @@ export class PoPageJobSchedulerService {
     return jobScheduler;
   }
 
-  private convertToJobSchedulerInternal(jobScheduler = <any>{}): PoJobSchedulerInternal {
+  convertToJobSchedulerInternal(jobScheduler = <any>{}): PoJobSchedulerInternal {
     const jobSchedulerInternal = { ...jobScheduler };
 
     if (jobScheduler.firstExecution) {

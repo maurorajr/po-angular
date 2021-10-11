@@ -170,7 +170,7 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   }
 
   onChangeProcess(process: { processId: string; existAPI: boolean }) {
-    if (process.existAPI && process.processId) {
+    if (process.existAPI && process.processId && !this.customParameters) {
       this.getParametersByProcess(process.processId);
 
       if (!this.isEdit) {
@@ -262,6 +262,13 @@ export class PoPageJobSchedulerComponent extends PoPageJobSchedulerBaseComponent
   }
 
   private save(model: PoJobSchedulerInternal, paramId) {
+    let newModel = this.poPageJobSchedulerService.convertToJobScheduler(model);
+
+    if (this.beforeSave) {
+      console.log('BEFORE SAVE::: ');
+      newModel = this.beforeSave(newModel);
+    }
+
     const saveOperation = paramId
       ? this.poPageJobSchedulerService.updateResource(paramId, model)
       : this.poPageJobSchedulerService.createResource(model);
