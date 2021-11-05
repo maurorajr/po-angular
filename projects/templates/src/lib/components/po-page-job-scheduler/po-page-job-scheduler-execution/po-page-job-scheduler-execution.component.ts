@@ -33,6 +33,9 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
   periodicityTemplates: { daily: TemplateRef<any>; weekly: TemplateRef<any>; monthly: TemplateRef<any> };
   timePattern = '^(2[0-3]|[01][0-9]):?([0-5][0-9])$';
   weekDays: Array<PoCheckboxGroupOption> = [];
+  frequencyOptions: Array<PoRadioGroupOption> = [];
+  containsFrequency = false;
+  frequency: string = 'hour';
 
   private _value: any = {};
 
@@ -53,6 +56,14 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
     return this.isEdit ? undefined : this.minDateFirstExecution;
   }
 
+  get hourLabel() {
+    return this.containsFrequency ? this.literals.startTime : this.literals.time;
+  }
+
+  get dayLabel() {
+    return this.containsFrequency ? this.literals.startDay : this.literals.day;
+  }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.subscribeProcessIdValueChanges();
@@ -70,6 +81,24 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
 
     this.periodicityOptions = this.getPeriodicityOptions();
     this.weekDays = this.getWeekDays();
+    this.frequencyOptions = this.getFrequencyOptions();
+  }
+
+  changeContainsFrequency(containsFrequency) {
+    if (containsFrequency) {
+      this.value.frequency = { type: 'hour', value: null };
+    } else {
+      this.value.frequency = {};
+    }
+
+    this.value.rangeLimitHour = null;
+  }
+
+  onChangePeriodicityOptions(periodicity) {
+    this.frequencyOptions = this.frequencyOptions.map(frequencyOption => ({
+      ...frequencyOption,
+      disabled: frequencyOption.value === 'day' && periodicity !== 'monthly'
+    }));
   }
 
   private checkExistsProcessesAPI() {
@@ -84,6 +113,14 @@ export class PoPageJobSchedulerExecutionComponent implements OnInit, AfterViewIn
       { label: this.literals.daily, value: 'daily' },
       { label: this.literals.weekly, value: 'weekly' },
       { label: this.literals.monthly, value: 'monthly' }
+    ];
+  }
+
+  private getFrequencyOptions() {
+    return [
+      { label: this.literals.day, value: 'day' },
+      { label: this.literals.hour, value: 'hour' },
+      { label: this.literals.minute, value: 'minute' }
     ];
   }
 

@@ -29,7 +29,7 @@
             #schedulerParameters
             class="po-md-12"
             [p-literals]="literals"
-            [p-parameters]="customParameters || parameters || []"
+            [p-parameters]="parameters || []"
             [(p-value)]="model.executionParameter"
           >
           </po-page-job-scheduler-parameters>
@@ -38,7 +38,7 @@
             *ngIf="step === 3"
             class="po-md-12"
             [p-literals]="literals"
-            [p-parameters]="customParameters || parameters"
+            [p-parameters]="parameters"
             [p-value]="publicValues"
           >
           </po-page-job-scheduler-summary>
@@ -46,5 +46,4 @@
       </form>
     </po-container>
   </div>
-  {{ model | json }}
 </po-page-default>

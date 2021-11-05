@@ -157,16 +157,6 @@ export class PoPageJobSchedulerBaseComponent implements OnDestroy {
   /** Título da página. */
   @Input('p-title') title: string;
 
-  /** Título da página. */
-  @Input('p-value') set value(value: any) {
-    console.log(value);
-    this.model = this.poPageJobSchedulerService.convertToJobSchedulerInternal(value);
-  }
-
-  @Input('p-parameters') customParameters: Array<any> = [];
-
-  @Input('p-before-save') beforeSave: (model) => any;
-
   model: PoJobSchedulerInternal = new PoPageJobSchedulerInternal();
 
   private _subscription = new Subscription();
